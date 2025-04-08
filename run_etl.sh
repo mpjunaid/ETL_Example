@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VENV_DIR="venv"
+VENV_DIR="/home/junaid/ETL_Example/venv"
 
 # Step 1: Check for virtual environment
 if [ ! -d "$VENV_DIR" ]; then
@@ -19,9 +19,9 @@ fi
 source $VENV_DIR/bin/activate
 
 # Step 3: Install requirements
-if [ -f "requirements.txt" ]; then
+if [ -f "/home/junaid/ETL_Example/requirements.txt" ]; then
   echo "📦 Installing dependencies..."
-  pip install -r requirements.txt
+  pip install -r /home/junaid/ETL_Example/requirements.txt
 
   if [ $? -ne 0 ]; then
     echo "❌ Failed to install dependencies."
@@ -34,8 +34,8 @@ fi
 
 # Step 4: Run the main ETL pipeline
 echo "🚀 Running ETL pipeline..."
-python main.py
+python /home/junaid/ETL_Example/main.py
 
 # Step 5: Deactivate virtual environment
 deactivate
-echo "✅ ETL process completed."
+echo "✅ Bash execution completed."
