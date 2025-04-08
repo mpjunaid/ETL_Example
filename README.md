@@ -1,114 +1,106 @@
-🛠️ ETL Pipeline in Python
+# 🛠️ ETL Pipeline in Python
 
 This project demonstrates a modular and beginner-friendly ETL (Extract, Transform, Load) pipeline in Python. It is designed to extract Tata Steel stock prices from the web, transform the data, and load it into a MySQL database.
 
 The pipeline is split into three main components:
 
-Extract: Collects data using web scraping.
-
-Transform: Cleans and converts the data into a structured format.
-
-Load: Saves the cleaned data into a MySQL database.
+- **Extract:** Collects data using web scraping.
+- **Transform:** Cleans and converts the data into a structured format.
+- **Load:** Saves the cleaned data into a MySQL database.
 
 The project uses:
 
-requests and BeautifulSoup for web scraping
+- `requests` and `BeautifulSoup` for web scraping  
+- `python-dotenv` to manage environment variables  
+- `mysql-connector-python` to interact with the MySQL database
 
-python-dotenv to manage environment variables
+---
 
-mysql-connector-python to interact with the MySQL database
+# 📄 File Explanations - ETL Pipeline in Python
 
-🚀 How to Run the Project
+This document provides a concise explanation of the purpose and role of each Python file used in the ETL pipeline project.
 
-1. Clone the Repository
+---
 
-git clone https://github.com/yourusername/your-etl-project.git
-cd your-etl-project
+## `main.py`
 
-2. Setup Environment Variables
+**Role:**  
+This is the main entry point for the ETL pipeline.
 
-Create a .env file in the root directory:
+**Functionality:**
+- Loads environment variables from `.env`
+- Imports and calls the `extract`, `transform`, and `load` functions
+- Handles any pipeline-level error handling or orchestration logic
 
+---
+
+## `extract.py`
+
+**Role:**  
+Responsible for the **Extract** step of the ETL pipeline.
+
+**Functionality:**
+- Uses `requests` to fetch the web page containing Tata Steel stock price
+- Uses `BeautifulSoup` to parse and extract the stock price from HTML
+- Returns the extracted price data to be processed in the transform step
+
+---
+
+## `transform.py`
+
+**Role:**  
+Handles the **Transform** step of the ETL process.
+
+**Functionality:**
+- Validates the extracted data (e.g., ensures it's a valid float or number)
+- Formats or cleans the data if necessary
+- Returns the cleaned and validated data ready to be inserted into the database
+
+---
+
+## `load.py`
+
+**Role:**  
+Handles the **Load** step of the ETL pipeline.
+
+**Functionality:**
+- Connects to a MySQL database using credentials from the `.env` file
+- Creates a table `tatasteel_stock_prices` if it doesn't exist
+- Inserts the transformed data into the database with a timestamp
+- Closes the database connection safely
+
+---
+
+## 🖥️ `run_etl.sh`
+
+**Purpose:**  
+This is a shell script to automate the setup and execution of the ETL pipeline.
+
+**What it does:**
+- Checks if a Python virtual environment (`venv/`) exists.
+- If not, it creates a new virtual environment.
+- Activates the virtual environment.
+- Installs all required Python packages listed in `requirements.txt`.
+- Runs the main Python script (`main.py`) to start the ETL process.
+
+**Usage:**
+```bash
+chmod +x run_etl.sh   # Make the script executable (run once)
+./run_etl.sh          # Execute the script
+```
+---
+
+## 🔐 .env
+
+**Purpose:**  
+
+Stores sensitive or environment-specific configuration values securely and separately from the source code.
+
+Contents:
+```bash
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=airflow
 DB_PASSWORD=airflow_password
 DB_NAME=airflow
-
-3. Run the Shell Script
-
-Use the provided shell script run_etl.sh which will:
-
-Check for an existing virtual environment or create one
-
-Install dependencies from requirements.txt
-
-Activate the environment
-
-Run the ETL pipeline using main.py
-
-Make the script executable:
-
-chmod +x run_etl.sh
-
-Run the script:
-
-./run_etl.sh
-
-🕒 Automate with Crontab
-
-To schedule automatic execution of the ETL job:
-
-1. Find Absolute Path to Script
-
-pwd
-
-2. Open Crontab
-
-crontab -e
-
-3. Add the Job
-
-To run the script every day at 9 AM:
-
-0 9 * * * /bin/bash /full/path/to/your/project/run_etl.sh >> /full/path/to/your/project/log.txt 2>&1
-
-This ensures:
-
-Script runs daily
-
-Logs are stored in log.txt
-
-📦 Requirements
-
-Install dependencies manually with:
-
-pip install -r requirements.txt
-
-Dependencies include:
-
-requests
-
-beautifulsoup4
-
-mysql-connector-python
-
-python-dotenv
-
-📁 File Descriptions
-
-extract.py: Scrapes the Tata Steel stock price from Google Finance using BeautifulSoup.
-
-transform.py: Processes and validates the scraped data to ensure it's in a usable format.
-
-load.py: Connects to the MySQL database using credentials from .env and inserts the transformed data.
-
-config.py (optional): Used when not using .env to store configuration parameters.
-
-main.py: Orchestrates the full ETL process by calling extract, transform, and load steps. Also handles environment setup.
-
-requirements.txt: Lists the required Python libraries for the project.
-
-run_etl.sh: Shell script that sets up the virtual environment, installs dependencies, and runs the ETL pipeline.
-
-.env: Contains sensitive configuration values like database connection details (not committed to version control).
+```
